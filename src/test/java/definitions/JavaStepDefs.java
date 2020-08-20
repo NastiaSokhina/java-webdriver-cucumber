@@ -4,8 +4,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.codehaus.groovy.transform.sc.ListOfExpressionsExpression;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class JavaStepDefs {
 
@@ -115,4 +114,49 @@ public class JavaStepDefs {
         String[] dayOfTheWeek = {"Monday", "Truesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
                 System.out.println(num +"th day of the week is " + dayOfTheWeek[num - 1]);
     }
+
+
+    @And("return true if {float} is even and divisible by five or if odd and divisible by three")
+    public void returnTrueIfIsEvenAndDivisibleByFiveOrIfOddAndDivisibleByThree(float num) {
+        Float remainderFive = num % 5;
+        Float remainderThree = num%3;
+        Float isEven = num%2;
+        if ( num % 5 == 0 || num%3 == 0) {
+            System.out.println(num+ " is even and divisible by five");
+        } else if (isEven != 0 && remainderThree == 0) {
+            System.out.println(num+ " is odd and divisible by three");
+        } else {
+            System.out.println(num+ " is out of scope");
+        }
+
+    }
+
+    @And("print out all letters from ASCII")
+    public void printOutAllLettersFromASCII() {
+        char i;
+        for (i = 'A'; i <= 'Z'; i++)
+        {
+            System.out.printf("%c ", i);
+        }
+    }
+
+    @And("I solve the stocks task")
+    public void iSolveTheStocksTask() {
+    }
+
+    @Given("I swap first name and middle name")
+    public void iSwapFirstNameAndMiddleName() {
+        Map<String, String> info = new LinkedHashMap<>();
+
+        info.put("firstName", "John");
+        info.put("middleName", "George");
+        System.out.println("before: " + info);
+
+        String placeholder = info.get("middleName");
+
+        info.put("middleName", info.get("firstName"));
+        info.put("firstName", placeholder);
+        System.out.println("after: " + info);
+    }
+
 }

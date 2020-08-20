@@ -17,3 +17,13 @@ Feature: Java Feature
 
     And I ask if -4 is positive
     And I print 7th day of the week
+
+  @java2
+    Scenario: Team1 assignment1
+      And return true if 50 is even and divisible by five or if odd and divisible by three
+      #And print out all letters from ASCII
+    And I solve the stocks task
+
+  @java3
+    Scenario: John to George
+      Given I swap first name and middle name
