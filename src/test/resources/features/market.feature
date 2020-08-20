@@ -24,7 +24,7 @@
       Given I go to "quote" page
       And I fill out required fields
       And I submit the page
-#      Then I verify that fields values recorded correctly
+      Then I verify that fields values recorded correctly
 
     @market5
     Scenario: Verify email behavior

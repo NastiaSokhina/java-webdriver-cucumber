@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import support.TestContext;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class MarketStepsDefs {
         switch (page) {
             case "quote" -> getDriver().get("http://skryabin.com/market/quote.html");
             case "google" -> getDriver().get("https://www.google.com/");
+            case "USPS" -> getDriver().get("https://www.usps.com/");
             default -> System.out.println("page out of scope");
         }
     }
@@ -96,8 +98,19 @@ public class MarketStepsDefs {
 
     @Then("I verify that fields values recorded correctly")
     public void iVerifyThatFieldsValuesRecordedCorrectly() {
-        assert(getDriver().getTitle().equalsIgnoreCase("get a quote"));
-//        assert(getDriver().findElement(By.xpath("//b[@name='firstName']").getText()));
+
+        String result = getDriver().findElement(By.xpath("//div[@id='quotePageResult']")).getText();
+
+//        System.out.println(result);
+        assertThat(result).containsIgnoringCase("Nastia");
+        assertThat(result).containsIgnoringCase("Nastia123@grr.la");
+        assertThat(result).containsIgnoringCase("Sokhina");
+        assertThat(result).containsIgnoringCase("user55");
+
+        String privacyPolicy = getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText();
+        assertThat(privacyPolicy).isEqualTo("true");
+
+        assertThat(result).doesNotContain("Welcome1");
     }
 
 }
