@@ -27,3 +27,12 @@ Feature: Java Feature
   @java3
     Scenario: John to George
       Given I swap first name and middle name
+
+  @java4
+    Scenario: Function to swap elements in array
+      Given I get an array and I swap a 3rd and 5th elements
+
+  @java5
+    Scenario: Check if divisible
+      And I check if 118 is divisible by three or four
+

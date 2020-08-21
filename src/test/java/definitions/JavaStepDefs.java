@@ -159,4 +159,35 @@ public class JavaStepDefs {
         System.out.println("after: " + info);
     }
 
+    @Given("I get an array and I swap a {int}rd and {int}th elements")
+    public void iGetAnArrayAndISwapARdAndThElements(int third, int fifth) {
+        int [] array = new int[] {5,2,9,7,3};
+
+        for (int i = 0; i < array.length-1; i++) {
+            System.out.print(array[i] + ", ");
+            }
+        System.out.println(array[array.length-1]);
+
+        int placeHolder = array[third-1];
+        array[third-1] = array[fifth-1];
+        array[fifth-1] = placeHolder;
+
+        for (int i = 0; i < array.length-1; i++) {
+            System.out.print(array[i] + ", ");
+        }
+        System.out.println(array[array.length-1]);
+    }
+
+    @And("I check if {int} is divisible by three or four")
+    public void iCheckIfIsDivisibleByThreeOrFour(int num) {
+        if (num%3==0 && num%4==0) {
+            System.out.println(num + " is divisible by three and four");
+        } else if (num%4==0) {
+            System.out.println(num+ " is divisible by four");
+        } else if (num%3==0 ) {
+            System.out.println(num+ " is divisible by three");
+        } else {
+            System.out.println(num+ " is not divisible by neither three or four");
+        }
+    }
 }
