@@ -36,3 +36,13 @@ Feature: Java Feature
     Scenario: Check if divisible
       And I check if 118 is divisible by three or four
 
+
+  @java6
+    Scenario: Coding challenges Homework 8
+#      And I print all numbers from zero to 6
+#      And I print all numbers from 0 including negative
+#      And I print all integer array
+#      And I only even numbers from an array
+#      And I check if an array is empty
+#      And I check if an array has 13
+      And I print out all number up to 15 and check if its divisible by three or five

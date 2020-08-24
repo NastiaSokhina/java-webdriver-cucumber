@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given;
 import org.codehaus.groovy.transform.sc.ListOfExpressionsExpression;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class JavaStepDefs {
 
@@ -189,5 +190,91 @@ public class JavaStepDefs {
         } else {
             System.out.println(num+ " is not divisible by neither three or four");
         }
+    }
+
+    @And("I print all numbers from zero to {int}")
+    public void iPrintAllNumbersFromZeroTo(int n) {
+
+        for (int i=0; i <= n; i++) {
+            System.out.println(i);
+        }
+    }
+
+    @And("I print all numbers from {int} including negative")
+    public void iPrintAllNumbersFromIncludingNegative(int n) {
+        if (n>0) {
+            for (int i=0; i <= n; i++) {
+                System.out.println(i);
+            }
+        } else if (n<0) {
+            for (int i=n; i <= 0; i++) {
+                System.out.println(i);
+            }
+        }
+    }
+
+    @And("I print all integer array")
+    public void iPrintAllIntegerArray() {
+        int[] array = {2, 56,3,4,78,23,1,15}; {
+            for (int i : array) {
+                System.out.println(i);
+            }
+        }
+    }
+
+    @And("I only even numbers from an array")
+    public void iOnlyEvenNumbersFromAnArray() {
+        int[] array = {2, 56,3,4,78,23,1,15, 201, 10, 33}; {
+            for (int i : array) {
+                if (i%2==0) {
+                    System.out.println(i);
+                }
+            }
+        }
+    }
+
+    @And("I print out all number up to {int} and check if its divisible by three or five")
+    public void iPrintOutAllNumberUpToAndCheckIfItsDivisibleByThreeOrFive(int n) {
+            for (int i=1; i<=n; i++ ) {
+                if (i%15==0) {
+                    System.out.println("FizzBuzz");
+                }else if (i%5==0) {
+                    System.out.println("Buzz");
+                } else if (i%3==0) {
+                    System.out.println("Fizz");
+                } else {
+                    System.out.println(i);
+                }
+            }
+    }
+
+
+    @And("I check if an array is empty")
+    public void iCheckIfAnArrayIsEmpty() {
+        int[] array = { };
+        if (array.length == 0) {
+            System.out.println("array is empty");
+        } else {
+            for (int i : array) {
+                System.out.println(i);
+            }
+        }
+    }
+
+
+    @And("I check if an array has {int}")
+    public void iCheckIfAnArrayHas(int num) {
+        int[] array = {2,5,13,73,67};
+            boolean result = false;
+            for (int i: array) {
+                if (i == num) {
+                    result = true;
+                    break;
+                }
+            }
+            if (result) {
+                System.out.println("array contains "+num);
+            } else {System.out.println(num+" is not in this array");};
+
     }
 }
