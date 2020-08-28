@@ -2,6 +2,10 @@ package definitions;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import support.TestContext;
 import static org.assertj.core.api.Assertions.*;
 import static support.TestContext.getDriver;
@@ -38,5 +42,29 @@ public class UspsStepsDefs {
     public void iSubmitTheForm() throws InterruptedException  {
         getDriver().findElement(By.xpath("//a[@class='btn-primary'][@id='zip-by-address']")).click();
         Thread.sleep(2000);
+    }
+
+    @When("I go to Calculate Price Page")
+    public void iGoToCalculatePricePage() throws InterruptedException  {
+
+        Actions actions = new Actions(getDriver());
+        WebElement quickTools = getDriver().findElement(By.xpath("//*[contains(@class, 'first-element')]"));
+        WebElement calculatePrice = getDriver().findElement(By.xpath("//a/img[contains(@alt,'Price')]"));
+        actions.moveToElement(quickTools).click(calculatePrice);
+        Thread.sleep(2000);
+    }
+
+    @When("I navigate to Find a Location page")
+    public void iNavigateToFindALocationPage() {
+        Actions actions = new Actions(getDriver());
+        WebElement quickTools = getDriver().findElement(By.xpath("//*[contains(@class, 'first-element')]"));
+    }
+
+    @And("I select {string} with {string} shape")
+    public void iSelectWithShape(String country, String optionType) throws InterruptedException  {
+        Thread.sleep(2000);
+        System.out.println(getDriver().findElement(By.xpath("//select[@id='CountryID']")).getText());
+
+
     }
 }

@@ -277,4 +277,16 @@ public class JavaStepDefs {
             } else {System.out.println(num+" is not in this array");};
 
     }
+
+    @And("I remove vowels from {string}")
+    public void iRemoveVowelsFrom(String s) {
+        String str1 = s.replace("a", "");
+        String str2 = str1.replace("o", "");
+        String str3 = str2.replace("i", "");
+        String str4 = str3.replace("e", "");
+        String str5 = str4.replace("u", "");
+        for (int i = 0; i < str5.length(); i++) {
+            System.out.print(str5.charAt(i));
+        }
+    }
 }

@@ -46,3 +46,7 @@ Feature: Java Feature
 #      And I check if an array is empty
 #      And I check if an array has 13
       And I print out all number up to 15 and check if its divisible by three or five
+
+@java7
+  Scenario: Coding challenge
+    And I remove vowels from "leetcodeiscommunityforcoders"
