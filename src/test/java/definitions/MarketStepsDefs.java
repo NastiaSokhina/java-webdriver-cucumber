@@ -111,6 +111,7 @@ public class MarketStepsDefs {
         assertThat(privacyPolicy).isEqualTo("true");
 
         assertThat(result).doesNotContain("Welcome1");
+
     }
 
 }
