@@ -146,4 +146,5 @@ public class UspsStepsDefs {
         WebElement result = getDriver().findElement(By.xpath("//div[@id='po-location-detail']"));
         wait.until(ExpectedConditions.textToBePresentInElement(result, phoneNumber));
     }
+
 }

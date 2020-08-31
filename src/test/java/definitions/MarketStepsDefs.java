@@ -23,6 +23,8 @@ public class MarketStepsDefs {
             case "quote" -> getDriver().get("http://skryabin.com/market/quote.html");
             case "google" -> getDriver().get("https://www.google.com/");
             case "USPS" -> getDriver().get("https://www.usps.com/");
+            case "converter" -> getDriver().get("https://www.unitconverters.net/");
+            case "calculator" -> getDriver().get("https://www.calculator.net/");
             default -> System.out.println("page out of scope");
         }
     }
