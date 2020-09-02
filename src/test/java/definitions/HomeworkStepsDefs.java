@@ -3,6 +3,7 @@ package definitions;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.assertj.core.data.Percentage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -11,13 +12,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Thread.*;
 import static org.assertj.core.api.Assertions.*;
 
-
-import static support.TestContext.getDriver;
+import static support.TestContext.*;
 
 public class HomeworkStepsDefs {
     @Then("I click on {string} tab")
@@ -66,8 +69,7 @@ public class HomeworkStepsDefs {
     @Then("I verify {string} calculator error")
     public void iVerifyCalculatorError(String errorText) {
         WebElement result = getDriver().findElement(By.xpath("(//td[@valign='top'])[2]"));
-        WebDriverWait wait = new WebDriverWait(getDriver(),5);
-        wait.until(ExpectedConditions.textToBePresentInElement(result, errorText));
+        getWait().until(ExpectedConditions.textToBePresentInElement(result, errorText));
     }
 
     @And("I enter {string} price, {string} months, {string} interest, {string} downpayment, {string} trade-in, {string} state, {string} percent tax, {string} fees")
@@ -94,10 +96,11 @@ public class HomeworkStepsDefs {
 
     @When("I go to {string} under {string}")
     public void iGoToUnder(String option, String tab) {
-        Actions actions = new Actions(getDriver());
-        WebElement tabElement = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(),'Business')]"));
-        WebElement optionElement = getDriver().findElement(By.xpath("//a[contains(text(),'Every Door Direct Mail')]"));
-        actions.moveToElement(tabElement).click(optionElement).perform();
+
+        WebElement tabElement = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(),'"+tab+"')]"));
+        WebElement optionElement = getDriver().findElement(By.xpath("//a[contains(text(),'"+option+"')]"));
+        getActions().moveToElement(tabElement).click(optionElement).perform();
+        getWait(3);
     }
 
     @And("I search for {string}")
@@ -107,11 +110,13 @@ public class HomeworkStepsDefs {
     }
 
     @And("I click {string} on the map")
-    public void iClickOnTheMap(String resultsView) {
-        WebElement spinner = getDriver().findElement(By.xpath("//div[@id='eddm_overlay-bg']"));
-        new WebDriverWait(getDriver(), 8).until(ExpectedConditions.invisibilityOf(spinner));
+    public void iClickOnTheMap(String resultsView) throws InterruptedException {
+        WebElement spinner = getDriver().findElement(By.xpath("//div[@id='eddm_overlay-progress']"));
+        getWait().until(ExpectedConditions.invisibilityOf(spinner));
+        WebElement resultsToggle = getDriver().findElement(By.xpath("//a[contains(text(),'"+resultsView+"')]"));
+        getExecutor().executeScript("arguments[0].click()", resultsToggle);
+        getWait(8);
 
-        getDriver().findElement(By.xpath("//a[@class='route-table-toggle']")).click();
     }
 
     @When("I click {string} on the table")
@@ -125,9 +130,36 @@ public class HomeworkStepsDefs {
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
-    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
-        List<WebElement> rows = getDriver().findElements(By.xpath("//div[@class='dojoxGridScrollbox']"));
-        System.out.println(rows);
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws ParseException {
+        String totalCountString = getDriver().findElement(By.xpath("//a[contains(@class, 'totalsArea')]")).getText();
+        int totalCount = Integer.parseInt(totalCountString.replaceAll("\\D*", ""));
 
+        By costListSelector = By.xpath("//td[@idx='7']");
+        List<WebElement> costList = getDriver().findElements(costListSelector);
+        System.out.println("Expected elements size: " + totalCount);
+
+        // dealing with infinite scroll
+        while (costList.size() < totalCount) {
+            System.out.println("Actual elements size: " + costList.size());
+            int lastIndex = costList.size() - 1;
+            getActions().moveToElement(costList.get(lastIndex)).perform();
+            costList = getDriver().findElements(costListSelector);
+        }
+        System.out.println("Actual elements size: " + costList.size());
+
+        Locale locale = new Locale("en", "US");
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
+        double actualTotal = 0;
+        for (WebElement cost : costList) {
+            double costTotal = formatter.parse(cost.getText()).doubleValue();
+            actualTotal += costTotal;
+        }
+        System.out.println("Actual total " + actualTotal);
+
+        String expectedTotalString = getDriver().findElement(By.xpath("//span[@class='approx-cost']")).getText();
+        double expectedTotal = Double.parseDouble(expectedTotalString);
+        System.out.println("Expected total " + expectedTotal);
+
+        assertThat(actualTotal).isCloseTo(expectedTotal, Percentage.withPercentage(1));
     }
 }

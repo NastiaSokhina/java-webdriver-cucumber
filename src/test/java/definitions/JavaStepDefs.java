@@ -2,6 +2,7 @@ package definitions;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import org.apache.commons.lang3.Range;
 import org.codehaus.groovy.transform.sc.ListOfExpressionsExpression;
 
 import java.util.*;
@@ -287,6 +288,21 @@ public class JavaStepDefs {
         String str5 = str4.replace("u", "");
         for (int i = 0; i < str5.length(); i++) {
             System.out.print(str5.charAt(i));
+        }
+    }
+
+    @And("I input {int} and {int} to check the range that they belong to")
+    public void iInputAndToCheckTheRangeThatTheyBelongTo(int num1, int num2) {
+        if (num1%5==0 && num2%5==0) {
+            Range<Integer> range1 = Range.between(1, 10);
+            Range<Integer> range2 = Range.between(11,20);
+            if (range1.contains(num1) || range1.contains(num2)) {
+                System.out.println("This number belongs to 1...10 range");
+            } else if (range2.contains(num1) || range2.contains(num2)) {
+                System.out.println("This number belongs to 11...20 range");
+            }
+        } else {
+            System.out.println("Please provide numbers divisible by 5");
         }
     }
 }

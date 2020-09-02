@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.lang.Thread.*;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class MarketStepsDefs {
@@ -60,6 +61,9 @@ public class MarketStepsDefs {
 
     @And("I fill out required fields")
     public void iFillOutRequiredFields() throws InterruptedException {
+
+        Map<String, String> user = getData("user");
+
         getDriver().findElement(By.xpath("//input[@name='username']")).click();
         getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("User55");
         getDriver().findElement(By.xpath("//input[@name='email']")).click();

@@ -50,3 +50,7 @@ Feature: Java Feature
 @java7
   Scenario: Coding challenge
     And I remove vowels from "leetcodeiscommunityforcoders"
+
+  @java8
+    Scenario: Coding challenges Homework 10
+    And I input 5 and 20 to check the range that they belong to
