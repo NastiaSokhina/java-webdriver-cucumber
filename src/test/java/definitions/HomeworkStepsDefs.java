@@ -97,10 +97,16 @@ public class HomeworkStepsDefs {
     @When("I go to {string} under {string}")
     public void iGoToUnder(String option, String tab) {
 
-        WebElement tabElement = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(),'"+tab+"')]"));
-        WebElement optionElement = getDriver().findElement(By.xpath("//a[contains(text(),'"+option+"')]"));
-        getActions().moveToElement(tabElement).click(optionElement).perform();
-        getWait(3);
+        WebElement tabElement = getDriver().findElement(By.xpath("//a[@role='menuitem'][(text()='"+tab+"')]"));
+//        WebElement optionElement = getDriver().findElement(By.xpath("//a[@role='menuitem'][contains(text(),'"+option+"')]"));
+        getActions().moveToElement(tabElement).perform();
+       getDriver().findElement(By.xpath("//a[@role='menuitem'][(text()='"+option+"')]")).click();
+//        getActions().click(optionElement).perform();
+
+
+       // getWait(3);
+
+
     }
 
     @And("I search for {string}")

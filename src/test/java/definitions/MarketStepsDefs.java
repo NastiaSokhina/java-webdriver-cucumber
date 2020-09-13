@@ -26,6 +26,7 @@ public class MarketStepsDefs {
             case "USPS" -> getDriver().get("https://www.usps.com/");
             case "converter" -> getDriver().get("https://www.unitconverters.net/");
             case "calculator" -> getDriver().get("https://www.calculator.net/");
+            case "UPS" -> getDriver().get("https://www.ups.com/us/en/Home.page");
             default -> System.out.println("page out of scope");
         }
     }

@@ -147,4 +147,21 @@ public class UspsStepsDefs {
         wait.until(ExpectedConditions.textToBePresentInElement(result, phoneNumber));
     }
 
+    @And("I enter {string} into store search")
+    public void iEnterIntoStoreSearch(String searchWord) {
+        getDriver().findElement(By.xpath("//input[@id='store-search']")).sendKeys(searchWord);
+    }
+
+    @Then("I search and validate no products found")
+    public void iSearchAndValidateNoProductsFound() {
+        getDriver().findElement(By.xpath("//input[@id='store-search-btn']")).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//div[@class='no-product']"))));
+    }
+
+    @And("choose mail service Priority Mail")
+    public void chooseMailServicePriorityMail() {
+        WebElement checkbox = getDriver().findElement(By.xpath("(//input[@type='checkbox'][contains(@name,'Mail Service-Priority Mail')])[1]"));
+        checkbox.click();
+    }
 }
