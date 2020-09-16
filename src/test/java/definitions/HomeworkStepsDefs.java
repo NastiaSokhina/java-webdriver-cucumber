@@ -25,12 +25,12 @@ import static support.TestContext.*;
 public class HomeworkStepsDefs {
     @Then("I click on {string} tab")
     public void iClickOnTab(String tab) {
-        getDriver().findElement(By.xpath("//div[@id='menu']//a[contains(text(),'"+tab+"')]"));
+        getDriver().findElement(By.xpath("//li/a[text()='"+tab+"']")).click();
     }
 
     @Then("I select to convert from {string} to {string}")
     public void iSelectToConvertFromTo(String from, String to) {
-        WebElement fromElement = getDriver().findElement(By.xpath("//select[@id='calFrom']"));
+        WebElement fromElement = getDriver().findElement(By.xpath("//select[@name='calFrom']"));
         Select fromSelect = new Select(fromElement);
         fromSelect.selectByVisibleText(from);
 

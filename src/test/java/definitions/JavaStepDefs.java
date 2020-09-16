@@ -3,10 +3,8 @@ package definitions;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.apache.commons.lang3.Range;
-import org.codehaus.groovy.transform.sc.ListOfExpressionsExpression;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class JavaStepDefs {
 
@@ -304,5 +302,58 @@ public class JavaStepDefs {
         } else {
             System.out.println("Please provide numbers divisible by 5");
         }
+    }
+
+
+    @And("I write a function that counts number of each character in a string {string}")
+    public void iWriteAFunctionThatCountsNumberOfEachCharacterInAString(String str) {
+        int num = str.length();
+        System.out.println("Number of characters: "+num);
+    }
+
+    @And("I check if a word {string} is a palindrome")
+    public boolean iCheckIfAWordIsAPalindrome(String word) {
+        int i = 0;
+        int j = word.length() - 1;
+        while (j>i) {
+            if (word.charAt(i) != word.charAt(j)) {
+                System.out.println(word+" is not a palindrome");
+                return false;
+            }
+                i++;
+                j--;
+            }
+        return true;
+
+    }
+
+    @And("I check if array has duplicates")
+    public void iCheckIfArrayHasDuplicates() {
+        String[] array = {"rose", "lilly", "rose", "violet"};
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i+1; j < array.length; j++) {
+                if (array[i] == array[j]) {
+                    System.out.println("We got a duplicate!");
+                }
+            }
+        }
+    }
+
+    @And("I find two max numbers in an array")
+    public void iFindTwoMaxNumbersInAnArray() {
+        int[] array = {1, 200,6,2,5,3};
+        int maxOne = 0;
+        int maxTwo = 0;
+        for(int n:array) {
+            if(maxOne<n) {
+                maxTwo = maxOne;
+                maxOne =n;
+            } else if (maxTwo<n) {
+                maxTwo = n;
+            }
+        }
+        System.out.println("First max: "+maxOne);
+        System.out.println("Second max: "+maxTwo);
+
     }
 }

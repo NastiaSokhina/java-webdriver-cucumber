@@ -28,3 +28,19 @@ Feature: Homework 9
     When I click "Select All" on the table
     And I close modal window
     Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+
+  @homework4
+  Scenario Outline: Converter scenario outline
+    Given I go to "converter" page
+    Then I click on "<conversion>" tab
+    Then I select to convert from "<from>" to "<to>"
+    Then I calculate for the value of "<value>" and see the result
+
+    Examples:
+      | conversion  | from      | to         | value |
+      | Length      | Inch      | Centimeter | 2     |
+      | Temperature | Celsius   | Fahrenheit | 180   |
+      | Area        | Acre      | Hectare    | 2     |
+      | Volume      | US Gallon | Liter      | 1     |
+      | Weight      | Carrat    | Milligram  | 2     |
+      | Time        | Hour      | Minute     | 24    |

@@ -54,3 +54,10 @@ Feature: Java Feature
   @java8
     Scenario: Coding challenges Homework 10
     And I input 5 and 20 to check the range that they belong to
+
+  @java9
+    Scenario: Coding challenges Homework 11
+#    And I write a function that counts number of each character in a string "to be or not to be that is the question"
+#    And I check if a word "color" is a palindrome
+#    And I check if array has duplicates
+    And I find two max numbers in an array
