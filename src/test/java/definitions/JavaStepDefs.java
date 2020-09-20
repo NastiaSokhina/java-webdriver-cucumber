@@ -3,6 +3,7 @@ package definitions;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import org.apache.commons.lang3.Range;
+import pages.*;
 
 import java.util.*;
 
@@ -355,5 +356,43 @@ public class JavaStepDefs {
         System.out.println("First max: "+maxOne);
         System.out.println("Second max: "+maxTwo);
 
+    }
+
+    @And("I work with classes")
+    public void iWorkWithClasses() {
+        Animal cat = new Cat("Richie");
+        System.out.println(cat.getName());
+        cat.walk();
+        cat.sleep();
+        cat.speak();
+        cat.eat("fish");
+
+        Animal dog = new Dog();
+        dog.setName("Lessi");
+        System.out.println(dog.getName());
+        dog.walk();
+        dog.sleep();
+        dog.speak();
+        dog.eat("fish");
+
+        Animal canary = new Canary("Tweety");
+        canary.speak();
+
+        Animal panda = new Panda("Poh");
+        panda.sleep();
+        panda.speak();
+
+        List<Animal> list = new ArrayList<>();
+        list.add(cat);
+        list.add(dog);
+        list.add(canary);
+        printAnimalNames(list);
+    }
+    public void printAnimalNames(List<Animal> animals) {
+        System.out.println("print names method");
+        for (Animal animal : animals) {
+            animal.speak();
+            System.out.println(animal.getName());
+        }
     }
 }

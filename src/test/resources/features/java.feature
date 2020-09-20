@@ -61,3 +61,7 @@ Feature: Java Feature
 #    And I check if a word "color" is a palindrome
 #    And I check if array has duplicates
     And I find two max numbers in an array
+
+    @java10
+    Scenario: classes
+      And I work with classes

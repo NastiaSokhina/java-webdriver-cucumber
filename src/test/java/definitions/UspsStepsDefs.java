@@ -2,6 +2,7 @@ package definitions;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 
+import cucumber.api.java.eo.Se;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -11,8 +12,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import support.TestContext;
-import static support.TestContext.getDriver;
+
+import static support.TestContext.*;
 import static org.assertj.core.api.Assertions.*;
 
 import cucumber.api.java.en.When;
@@ -161,7 +162,95 @@ public class UspsStepsDefs {
 
     @And("choose mail service Priority Mail")
     public void chooseMailServicePriorityMail() {
-        WebElement checkbox = getDriver().findElement(By.xpath("(//input[@type='checkbox'][contains(@name,'Mail Service-Priority Mail')])[1]"));
-        checkbox.click();
+        WebElement checkbox = getDriver().findElement(By.xpath("//label[@for='checkbox-type-Mail Service-Priority Mail-1']"));
+        getExecutor().executeScript("arguments[0].click()", checkbox);
+    }
+
+    @Then("I verify {int} items found")
+    public void iVerifyItemsFound(int quantity) {
+        getWait().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//div[contains(@class,'col-6 col-md-4 results-per-page')]"), quantity));
+    }
+
+    @When("I unselect Stamps checkbox")
+    public void iUnselectStampsCheckbox() {
+        getDriver().findElement(By.xpath("//label[@for='checkbox-type-Category-Stamps']")).click();
+    }
+
+    @And("select {string} stamp Shape")
+    public void selectStampShape(String shape) {
+        WebElement shapeSelector = getDriver().findElement(By.xpath("//label[contains(@for,'checkbox-type-Stamp Shape-"+shape+"')]"));
+        getExecutor().executeScript("arguments[0].click();", shapeSelector);
+    }
+
+    @And("I click {string} color")
+    public void iClickColor(String color) {
+        WebElement colorPicker = getDriver().findElement(By.xpath("//div[@class='result-color-container']/div[contains(@onclick,'"+color+"')]"));
+        getExecutor().executeScript("arguments[0].click();", colorPicker);
+    }
+
+    @Then("I verify {string} and {string} filters")
+    public void iVerifyAndFilters(String color, String shape) {
+        WebElement shapeSelector = getDriver().findElement(By.xpath("//div[@class='cartridge-viewport']//span[contains(text(),'"+shape+"')]"));
+        assertThat(ExpectedConditions.elementToBeSelected(shapeSelector));
+        WebElement colorPicker = getDriver().findElement(By.xpath("//div[@class='cartridge-viewport']//span[contains(text(),'"+color+"')]"));
+        assertThat(ExpectedConditions.elementToBeSelected(colorPicker));
+
+
+    }
+
+    @And("I verify that items below {int} dollars exists")
+    public void iVerifyThatItemsBelowDollarsExists(int price) {
+        WebElement resultsPrice = getDriver().findElement(By.xpath("//div[@class='results-product-preview-price']/p"));
+        String getPrice = resultsPrice.getText().replace("$", "");
+        Double priceInt = Double.parseDouble(getPrice);
+        if (price>priceInt) {
+            System.out.println("it works!");
+        }
+    }
+
+    @When("I perform {string} search")
+    public void iPerformSearch(String searchWord) {
+        getDriver().findElement(By.xpath("//input[@id='home-input']")).sendKeys(searchWord);
+        getDriver().findElement(By.xpath("//input[@id='home-input']")).sendKeys(Keys.ENTER);
+    }
+
+    @And("I select {string} in results")
+    public void iSelectInResults(String searchResult) {
+        WebElement search = getDriver().findElement(By.xpath("//span[contains(text(),'"+searchResult+"')]"));
+        getExecutor().executeScript("arguments[0].click();", search);
+    }
+
+    @And("I click {string} button")
+    public void iClickButton(String buttonName) {
+        getDriver().findElement(By.xpath("//a[@class='button--primary'][text()='"+buttonName+"']")).click();
+    }
+
+    @And("verify {string} service exists")
+    public void verifyServiceExists(String serviceName) {
+        WebElement appointmentType = getDriver().findElement(By.xpath("//select[@id='passportappointmentType']"));
+        assertThat(ExpectedConditions.textToBePresentInElementValue(appointmentType, serviceName));
+    }
+
+    @And("I reserve new PO box for {string}")
+    public void iReserveNewPOBoxFor(String poNumber) {
+        getDriver().findElement(By.xpath("//input[@id='searchInput']")).sendKeys(poNumber);
+        getDriver().findElement(By.xpath("//input[@id='searchInput']")).sendKeys(Keys.ENTER);
+
+    }
+
+    @Then("I verify that {string} present")
+    public void iVerifyThatPresent(String officeName) {
+        WebElement searchResult = getDriver().findElement(By.xpath("//div[@class='row']/div/h2[@class='normal']/span"));
+        assertThat(ExpectedConditions.textToBePresentInElement(searchResult,officeName));
+
+    }
+
+    @And("I verify that {string} PO Box is available in {string}")
+    public void iVerifyThatPOBoxIsAvailableIn(String size, String officeName) {
+        WebElement office = getDriver().findElement(By.xpath("//div[@class='row']/div/h2[@class='normal']/span[contains(text(),'Los Altos')]"));
+        office.click();
+        WebElement sizeOption = getDriver().findElement(By.xpath("//img[@class='boxSize']/../p/span"));
+        assertThat(ExpectedConditions.textToBePresentInElement(sizeOption, size));
+
     }
 }
