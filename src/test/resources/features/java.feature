@@ -65,3 +65,7 @@ Feature: Java Feature
     @java10
     Scenario: classes
       And I work with classes
+
+  @java11
+  Scenario: coding challenges
+    And I print Fibonacci sequence until 5 number
