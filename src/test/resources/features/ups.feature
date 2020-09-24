@@ -28,8 +28,19 @@ Feature: scenarios for UPS
     And I submit the shipment form
     And I set description and check Saturday Delivery type
     Then I verify total charges changed
-#    When I submit the shipment form
-#    And I select Paypal payment type
-#    Then I review all recorded details on the review page
-#    And I cancel the shipment form
-#    Then I verify shipment form is reset
+    When I submit the shipment form
+    And I select Paypal payment type
+    Then I review all recorded details on the review page
+    And I cancel the shipment form
+    Then I verify shipment form is reset
+
+  @ups3
+  Scenario: UPS end to end first OOP
+    Given I open "ups" page oop
+    And I open Shipping menu oop
+    And I go to Create a Shipment oop
+    When I fill out origin shipment fields oop
+    And I submit the shipment form oop
+    Then I verify origin shipment fields submitted oop
+    And I cancel the shipment form oop
+    Then I verify shipment form is reset oop

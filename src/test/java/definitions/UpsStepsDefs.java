@@ -1,6 +1,7 @@
 package definitions;
 
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.api.java.eo.Do;
@@ -10,6 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.ShipmentForm;
+import pages.UpsForm;
 
 import java.util.Map;
 
@@ -171,6 +174,77 @@ public class UpsStepsDefs {
 
         String recieverInfo = getDriver().findElement(By.xpath("(//section[@class='ups-section col-md-6'])[2]")).getText();
         System.out.println(recieverInfo);
+
+    }
+
+    UpsForm form = new UpsForm();
+
+    @Given("I open {string} page oop")
+    public void iOpenPageOop(String website) {
+        switch (website) {
+            case "ups":
+                form.openPage();
+        }
+    }
+
+    @And("I open Shipping menu oop")
+    public void iOpenShippingMenuOop() {
+        form.openShippingTab();
+    }
+
+    @And("I go to Create a Shipment oop")
+    public void iGoToCreateAShipmentOop() {
+        form.clickCreateAShipment();
+    }
+
+    @When("I fill out origin shipment fields oop")
+    public void iFillOutOriginShipmentFieldsOop() {
+        Map<String, String> info = getData("address");
+        form.fillInName(info.get("name"));
+        form.fillAddress(info.get("street"), info.get("city"), info.get("zip"), info.get("state"));
+        form.fillEmail(info.get("email"));
+        form.fillPhoneNumber(info.get("phone"));
+    }
+
+    @And("I submit the shipment form oop")
+    public void iSubmitTheShipmentFormOop() {
+
+        form.clickContinue();
+    }
+
+    ShipmentForm shipmentForm = new ShipmentForm();
+
+    @Then("I verify origin shipment fields submitted oop")
+    public void iVerifyOriginShipmentFieldsSubmittedOop() {
+        Map<String, String> info = getData("address");
+        String name = shipmentForm.getNameText();
+        assertThat(name).contains(info.get("name"));
+        String street = shipmentForm.getStreetText();
+//        assertThat(street).contains(info.get("street"));
+        String city = shipmentForm.getCityText();
+        assertThat(city).contains(info.get("city"));
+
+        String zip = shipmentForm.getZipText();
+        assertThat(zip).contains(info.get("zip"));
+        String email = shipmentForm.getEmailtext();
+        assertThat(email).contains(info.get("email"));
+        String phone = shipmentForm.getPhonetext();
+        assertThat(phone).contains(info.get("phone"));
+
+    }
+
+    @And("I cancel the shipment form oop")
+    public void iCancelTheShipmentFormOop() {
+        shipmentForm.clickCancelButton();
+    }
+
+    @Then("I verify shipment form is reset oop")
+    public void iVerifyShipmentFormIsResetOop() {
+        form.isNameEmpty();
+        form.isStreetEmpty();
+        form.isZipEmpty();
+        form.isEmailEmpty();
+        form.isPhoneEmpty();
 
     }
 }

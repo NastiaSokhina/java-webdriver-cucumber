@@ -68,7 +68,6 @@ public class QuoteStepsDefs {
         Map<String, String> user = getData(role);
         form.fillAddress(user.get("address"));
         form.fillPhoneNumber(user.get("phoneNumber"));
-
     }
 
     @Then("I verify optional fields for {string} oop")
@@ -77,8 +76,6 @@ public class QuoteStepsDefs {
         String resultText = result.getResultText();
         assertThat(resultText).contains(user.get("address"));
         assertThat(resultText).contains(user.get("phoneNumber"));
-
-
     }
 
     @Then("I see {string} error message {string}")
