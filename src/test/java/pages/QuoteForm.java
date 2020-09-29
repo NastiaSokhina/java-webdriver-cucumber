@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
     private String url;
     private String title;
@@ -18,10 +18,6 @@ public class QuoteForm {
         url = "http://skryabin.com/market/quote.html";
         title = "Get a Quote";
         PageFactory.initElements(getDriver(), this);
-    }
-
-    public void openPage() {
-        getDriver().get(url);
     }
 
     @FindBy(xpath = "//input[@name='username']")

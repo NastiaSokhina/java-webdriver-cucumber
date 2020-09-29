@@ -6,7 +6,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class QuoteResult  {
+public class QuoteResult extends Page  {
 
     private String url;
     private String title;

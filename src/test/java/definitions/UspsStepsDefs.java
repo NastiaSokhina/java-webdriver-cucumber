@@ -1,5 +1,6 @@
 package definitions;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 
 import cucumber.api.java.eo.Se;
@@ -17,6 +18,7 @@ import static support.TestContext.*;
 import static org.assertj.core.api.Assertions.*;
 
 import cucumber.api.java.en.When;
+import pages.*;
 
 public class UspsStepsDefs {
     @When("I look up ZIP by address")
@@ -252,5 +254,56 @@ public class UspsStepsDefs {
         WebElement sizeOption = getDriver().findElement(By.xpath("//img[@class='boxSize']/../p/span"));
         assertThat(ExpectedConditions.textToBePresentInElement(sizeOption, size));
 
+    }
+
+    UspsHome uspsHome = new UspsHome();
+    UspsByAddressForm uspsByAddressForm = new UspsByAddressForm();
+    UspsByAddressResult uspsByAddressResult = new UspsByAddressResult();
+    @When("I go to Lookup ZIP page by address oop")
+    public void iGoToLookupZIPPageByAddressOop() {
+        uspsHome.goToLookupByZip().clickFindByAddress();
+    }
+
+    @And("I fill out {string} street, {string} city, {string} state oop")
+    public void iFillOutStreetCityStateOop(String street, String city, String state) {
+        uspsByAddressForm.fillStreet(street)
+                .fillCity(city)
+                .selectState(state)
+                .clickFind();
+    }
+
+    @Then("I validate {string} zip code exists in the result oop")
+    public void iValidateZipCodeExistsInTheResultOop(String zip) {
+        String actualTotalResult = uspsByAddressResult.getSearchResult();
+        assertThat(actualTotalResult).contains(zip);
+
+        boolean areAllItemsContainZip = uspsByAddressResult.areAllResultsContainZip(zip);
+        assertThat(areAllItemsContainZip).isTrue();
+    }
+
+    UspsCalculatePrice uspsCalculatePrice = new UspsCalculatePrice();
+    UspsPriceCalculator uspsPriceCalculator = new UspsPriceCalculator();
+
+    @When("I go to Calculate Price Page oop")
+    public void iGoToCalculatePricePageOop() {
+        uspsHome.goToCalculatePrice();
+    }
+
+    @And("I select {string} with {string} shape oop")
+    public void iSelectWithShapeOop(String country, String shape) {
+        uspsCalculatePrice.selectCountry(country);
+        uspsCalculatePrice.selectOption(shape);
+    }
+
+    @And("I define {string} quantity oop")
+    public void iDefineQuantityOop(String quantity) {
+        uspsPriceCalculator.putQuantity(quantity);
+
+    }
+
+    @Then("I calculate the price and validate cost is {string} oop")
+    public void iCalculateThePriceAndValidateCostIsOop(String price) {
+        uspsPriceCalculator.clickCalculate();
+        uspsPriceCalculator.verifyCost(price);
     }
 }

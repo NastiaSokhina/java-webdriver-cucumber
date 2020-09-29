@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.ShipmentForm;
 import pages.UpsForm;
+import pages.UspsHome;
 
 import java.util.Map;
 
@@ -179,14 +180,6 @@ public class UpsStepsDefs {
 
     UpsForm form = new UpsForm();
 
-    @Given("I open {string} page oop")
-    public void iOpenPageOop(String website) {
-        switch (website) {
-            case "ups":
-                form.openPage();
-        }
-    }
-
     @And("I open Shipping menu oop")
     public void iOpenShippingMenuOop() {
         form.openShippingTab();
@@ -247,4 +240,6 @@ public class UpsStepsDefs {
         form.isPhoneEmpty();
 
     }
+
+
 }

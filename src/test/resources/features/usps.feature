@@ -1,17 +1,22 @@
 @usps
   Feature: USPS scenarios
 
-    Background:
-      Given I go to "USPS" page
+#    Background:
+#      Given I go to "USPS" page
 
     @usps1
-    Scenario: Validate ZIP code
+    Scenario Outline: Validate ZIP code
       When I look up ZIP by address
-#      And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
-      And I fill out "306 hawthorne" street, "Houston" city, "TX" state
+      And I fill out "<street>" street, "<city>" city, "<state>" state
       And I submit the form
-#      Then I validate "94022" ZIP code exists in the result
-      Then I validate "77006" ZIP code exists in the result
+      Then I validate "<zip>" ZIP code exists in the result
+
+      Examples:
+        | street              | city      | state | zip   |
+        | 4970 El Camino Real | Los Altos | CA    | 94022 |
+        | 306 hawthorne       | Houston   | TX    | 77006 |
+
+
 
       #______________UI tasks for Homework 8__________
   @usps2
@@ -64,8 +69,29 @@ Scenario: Wrong store id does not match
       And I click "Schedule an Appointment" button
       And verify "Passport Renewal" service exists
 
+    @usps9
     Scenario: PO Box
       When I go to "PO Boxes" under "Track & Manage"
       And I reserve new PO box for "94022"
       Then I verify that "Los Altos  — Post Office" present
       And I verify that "Size 5-XL" PO Box is available in "Los Altos — Post Office"
+
+    @usps10
+    Scenario Outline: Validate ZIP code oop
+      Given I open "usps" page oop
+      When I go to Lookup ZIP page by address oop
+      And I fill out "<street>" street, "<city>" city, "<state>" state oop
+      Then I validate "<zip>" zip code exists in the result oop
+      Examples:
+        | street              | city      | state | zip   |
+        | 4970 El Camino Real | Los Altos | CA    | 94022 |
+        | 11 Wall st          | New York  | NY    | 10005 |
+        | 111 S Michigan Ave  | Chicago   | IL    | 60603 |
+
+    @usps11
+    Scenario: Calculate price oop
+      Given I open "usps" page oop
+      When I go to Calculate Price Page oop
+      And I select "Canada" with "Postcard" shape oop
+      And I define "2" quantity oop
+      Then I calculate the price and validate cost is "$2.40" oop
