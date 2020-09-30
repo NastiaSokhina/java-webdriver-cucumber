@@ -1,6 +1,7 @@
 package definitions;
 
 import cucumber.api.java.en.Given;
+import pages.CareersHome;
 import pages.QuoteForm;
 import pages.UspsHome;
 
@@ -15,6 +16,9 @@ public class CommonStepDefs {
                 break;
             case "usps":
                 new UspsHome().openPage();
+                break;
+            case "careers":
+                new CareersHome().openPage();
                 break;
             default:
                 throw new RuntimeException("Unexpected value: " + website);
