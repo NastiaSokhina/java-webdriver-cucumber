@@ -1,0 +1,8 @@
+recruiter:
+  email: owen@example.com
+  password: welcome
+  name: Owen Kelley
+  number: 1
+candidate:
+  email: user@example.com
+  password: welcome
