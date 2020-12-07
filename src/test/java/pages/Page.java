@@ -3,13 +3,21 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import support.Loggable;
+import support.Screenshot;
+
+import java.util.List;
+import java.util.logging.Level;
 
 import static support.TestContext.*;
 import static support.TestContext.getWait;
 
-public class Page {
+public class Page implements Loggable, Screenshot {
 
     // fields
     protected String url;
@@ -24,8 +32,27 @@ public class Page {
         getDriver().get(url);
     }
 
+    public void refresh() {
+        getDriver().navigate().refresh();
+    }
+
+    public boolean areErrorsPresent() {
+        LogEntries entries = getDriver().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : entries) {
+            if (entry.getLevel().equals(Level.SEVERE)) {
+                logError(entry.toString());
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected WebElement getByXpath(String xpath) {
         return getDriver().findElement(By.xpath(xpath));
+    }
+
+    protected List<WebElement> getAllByXpath(String xpath) {
+        return getDriver().findElements(By.xpath(xpath));
     }
 
     protected void mouseOver(WebElement element) {
@@ -34,6 +61,10 @@ public class Page {
 
     protected void waitForVisible(WebElement element) {
         getWait().until(ExpectedConditions.visibilityOf(element));
+    }
+
+    protected void waitForDisappear(WebElement element) {
+        getWait().until(ExpectedConditions.invisibilityOf(element));
     }
 
     protected void waitUntilContainsText(WebElement element) {
@@ -53,7 +84,7 @@ public class Page {
         try {
             element.click();
         } catch (ElementClickInterceptedException e) {
-            System.err.println("Exception clicking on element! Clicking with JS...");
+            getLogger().error("Exception clicking on element! Clicking with JS...");
             clickWithJS(element);
         }
     }

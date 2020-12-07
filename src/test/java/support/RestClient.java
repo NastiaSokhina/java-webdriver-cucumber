@@ -7,14 +7,18 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.io.File;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static support.TestContext.*;
+import static support.TestContext.getTimestamp;
+import static support.TestContext.setTestData;
 
-public class RestClient {
+public class RestClient implements Loggable {
 
     private String baseUrl = "https://skryabin.com/recruit/api/v1/";
     private static String loginToken;
@@ -22,7 +26,8 @@ public class RestClient {
     public static final String JSON = "application/json";
     public static final String AUTH = "Authorization";
 
-    public void login(Map<String, String> user) {
+    public RestClient login(Map<String, String> user) {
+        getLogger().info("Logging in user " + user.get("email"));
         // prepare
         RequestSpecification request = RestAssured.given()
                 .log().all()
@@ -44,11 +49,12 @@ public class RestClient {
                 .getMap("");
 
         loginToken = "Bearer " + result.get("token");
-        System.out.println(loginToken);
+        getLogger().info(loginToken);
+        return new RestClient();
     }
 
     public Map<String, Object> createPosition(Map<String, String> position) {
-
+        getLogger().info("Creating position !");
         // prepare
         RequestSpecification request = RestAssured.given()
                 .log().all()
@@ -76,6 +82,7 @@ public class RestClient {
     }
 
     public List<Map<String, Object>> getPositions() {
+        getLogger().info("Getting all positions");
         return RestAssured.given()
                 .log().all()
                 .baseUri(baseUrl)
@@ -91,6 +98,8 @@ public class RestClient {
     }
 
     public Map<String, Object> updatePosition(Map<String, String> fields, Object id) {
+        getLogger().info("Updating position id " + id);
+
         return RestAssured.given()
                 .log().all()
                 .baseUri(baseUrl)
@@ -109,6 +118,8 @@ public class RestClient {
     }
 
     public Map<String, Object> getPosition(Object id) {
+        getLogger().info("Getting position id " + id);
+
         return RestAssured.given()
                 .log().all()
                 .baseUri(baseUrl)
@@ -122,8 +133,27 @@ public class RestClient {
                 .jsonPath()
                 .getMap("");
     }
+    public Map<String, Object> findPositionByTitle(String title) {
+        getLogger().info("Searching position by title " + title);
+        List<Map<String, Object>> list = RestAssured.given()
+                .log().all()
+                .baseUri(baseUrl)
+                .basePath("positions")
+                .param("title", title)
+                .when()
+                .get()
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("");
+        return list.get(0);
+    }
 
     public void deletePositionById(Object id) {
+        getLogger().info("Deleting position id " + id);
+
         RestAssured.given()
                 .log().all()
                 .baseUri(baseUrl)
@@ -189,5 +219,6 @@ public class RestClient {
                 .statusCode(200)
                 .extract();
     }
+
 
 }

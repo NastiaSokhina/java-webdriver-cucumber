@@ -6,19 +6,20 @@ import cucumber.api.java.Before;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static support.TestContext.getDriver;
+import static support.TestContext.*;
 
 public class Hooks {
 
     @Before(order = 0)
     public void scenarioStart() {
         TestContext.initialize();
-        getDriver().manage().timeouts().implicitlyWait(2000, TimeUnit.MILLISECONDS); //implicit wait
+        TestContext.setTimestamp();
+        getDriver().manage().timeouts().pageLoadTimeout(getConfig().pageLoadTimeout, TimeUnit.SECONDS);
+        getDriver().manage().timeouts().implicitlyWait(getConfig().implicitTimeout, TimeUnit.SECONDS);
         getDriver().manage().deleteAllCookies();
-
-
     }
 
     @After(order = 0)
@@ -29,5 +30,20 @@ public class Hooks {
             scenario.embed(screenshot, "image/png");
         }
         TestContext.teardown();
+    }
+
+    @After(value = "@delete_position")
+    public void deletePosition() {
+        Map<String, Object> position = new RestClient().login(getData("recruiter"))
+                .findPositionByTitle(getPosition("automation").get("title"));
+        new RestClient().deletePositionById(position.get("id"));
+    }
+
+    @After(value = "@delete_position_if_failed")
+    public void deletePositionIfFailed(Scenario scenario) {
+        if (scenario.isFailed()) {
+            deletePosition();
+        }
+
     }
 }

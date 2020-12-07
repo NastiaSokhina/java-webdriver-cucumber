@@ -27,7 +27,7 @@ public class RestStepsdefs {
 
     @When("I create via REST {string} position")
     public void iCreateViaRESTPosition(String type) {
-        new RestClient().createPosition(getPosition(type));;
+        new RestClient().createPosition(getPosition(type));
     }
 
     @Then("I verify via REST new {string} position is in the list")
@@ -62,7 +62,7 @@ public class RestStepsdefs {
     public void iVerifyViaRESTNewPositionIsUpdated(String type) {
         Object expectedPositionId = getTestDataMap("newPosition").get("id");
         Map<String, Object> actualPosition = new RestClient().getPosition(expectedPositionId);
-        Map<String, String> expectedFields = getData(type + "_updated");
+        Map<String, String> expectedFields = getPosition(type + "_updated");
 
         for (String key : expectedFields.keySet()) {
             System.out.println("Verifying " + key);
@@ -74,15 +74,57 @@ public class RestStepsdefs {
     public void iDeleteViaRESTNewPosition() {
         Object expectedPositionId = getTestDataMap("newPosition").get("id");
         new RestClient().deletePositionById(expectedPositionId);
+
     }
 
-    @Then("I verity via REST new position is deleted")
+    @Then("I verify via REST new position is deleted")
     public void iVerityViaRESTNewPositionIsDeleted() {
-            Object deletedId = getTestDataMap("newPosition").get("id");
-            List<Map<String, Object>> actualPositions = new RestClient().getPositions();
+        Object deletedId = getTestDataMap("newPosition").get("id");
+        List<Map<String, Object>> actualPositions = new RestClient().getPositions();
 
-            for (Map<String, Object> position : actualPositions) {
-                assertThat(position.get("id")).isNotEqualTo(deletedId);
-            }
+        for (Map<String, Object> position : actualPositions) {
+            assertThat(position.get("id")).isNotEqualTo(deletedId);
+        }
+    }
+
+    @When("I create via REST {string} candidate")
+    public void iCreateViaRESTCandidate(String title) {
+        new RestClient().createCandidate(getCandidate(title));
+    }
+
+    @When("I add via REST {string} resume to a new candidate")
+    public void iAddViaRESTResumeToANewCandidate(String fileType) {
+        File resume = getFile("resume", fileType);
+        new RestClient().addResume(resume, getTestDataMap("newCandidate").get("id"));
+    }
+
+    @When("I update via REST {string} candidate")
+    public void iUpdateViaRESTCandidate(String fileType) {
+    }
+
+    @Then("I verify via REST that {string} resume has been added")
+    public void iVerifyViaRESTThatResumeHasBeenAdded(String fileType) throws IOException {
+        ExtractableResponse<Response> response = new RestClient().getResume(getTestDataMap("newCandidate").get("id"));
+        String disposition = response.header("content-disposition");
+        assertThat(disposition).isEqualTo("attachment; filename=resume." + fileType);
+
+        byte[] byteArray = response.asByteArray();
+        String signature = Hex.encodeHexString(byteArray);
+        switch (fileType) {
+            case "pdf":
+                assertThat(signature).startsWith("255044462d");
+                break;
+            case "doc":
+            case "xls":
+            case "ppt":
+                assertThat(signature).startsWith("D0CF11E0A1B11AE1");
+                break;
+        }
+
+        saveFile("returnedResume", fileType, byteArray);
+        File actualFile = getFile("resume", fileType);
+        File expectedFile = getFile("returnedResume", fileType);
+        boolean areEqual = FileUtils.contentEquals(actualFile, expectedFile);
+        assertThat(areEqual).isTrue();
     }
 }

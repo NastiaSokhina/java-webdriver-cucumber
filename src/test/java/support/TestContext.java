@@ -35,7 +35,7 @@ public class TestContext {
 
     private static Map<String, Object> testData = new HashMap<>();
 
-    public static Map<String, Object> getTestDataMap(String key) {
+    public static Map<String, Object> ]getTestDataMap(String key) {
         return (Map<String, Object>) testData.get(key);
     }
 
@@ -65,12 +65,8 @@ public class TestContext {
         return driver;
     }
 
-    public static Map<String, String> getPosition(String title) {
-        Map<String, String> position = getData(title);
-        String timestampedTitle = position.get("title");
-        if (timestampedTitle != null) {
-            position.put("title", timestampedTitle + getTimestamp());
-        }
+    public static Map<String, String> getPositionForRest(String title) {
+        Map<String, String> position = getPosition(title);
 
         String dateOpen = position.get("dateOpen");
         if (dateOpen != null) {
@@ -78,6 +74,15 @@ public class TestContext {
             position.put("dateOpen", isoDateOpen);
         }
 
+        return position;
+    }
+
+    public static Map<String, String> getPosition(String title) {
+        Map<String, Object> position = getData(title);
+        String timestampedTitle = position.get("title");
+        if (timestampedTitle != null) {
+            position.put("title", timestampedTitle + getTimestamp());
+        }
         return position;
     }
 
@@ -123,15 +128,8 @@ public class TestContext {
         return new Yaml().loadAs(getStream("config", "yml"), Config.class);
     }
 
-    public static <T extends Object> Map<String, T> getData(String fileName) {
-        File file = getFile(fileName, "yml");
-        FileInputStream stream = null;
-        try {
-            stream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return new Yaml().load(stream);
+    public static Map<String, Object> getData(String fileName) {
+        return new Yaml().load(getStream(fileName, "yml"));
     }
 
     public static WebDriverWait getWait() {
@@ -179,7 +177,7 @@ public class TestContext {
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
-//                    System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+                    System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
                     if (isHeadless) {
                         chromeOptions.setHeadless(true);
                         chromeOptions.addArguments("--window-size=" + size.getWidth() + "," + size.getWidth());

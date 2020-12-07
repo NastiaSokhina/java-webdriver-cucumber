@@ -19,9 +19,8 @@ public class CareersLoginPage extends CareersHome {
     private WebElement submitButton;
 
     public void enterCredentials(String role) {
-        Map<String, Map<String, String>> data = getData("test");
+        Map<String, Map<String, String>> data = getData("credentials");
         Map<String, String> logins = data.get(role);
-
         usernameField.sendKeys(logins.get("email"));
         passwordField.sendKeys(logins.get("password"));
 
